@@ -2,6 +2,8 @@ package com.airhockey.android.util;
 
 import android.util.Log;
 
+import com.airhockey.android.BuildConfig;
+
 import static android.opengl.GLES20.GL_COMPILE_STATUS;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
 import static android.opengl.GLES20.GL_LINK_STATUS;
@@ -82,6 +84,19 @@ public class ShaderHelper {
         Log.v(TAG, "Results of validateProgram: " + validateStatus[0] +
                 "\nLog:" + glGetProgramInfoLog(programObjectId));
         return validateStatus[0] != 0;
+    }
 
+    public static int buildProgram(String vertexShaderSource, String fragmentShaderSource) {
+        int program;
+        int vertexShader = compileVertexShader(vertexShaderSource);
+        int fragmentShader = compileFragmentSahder(fragmentShaderSource);
+
+        program = linkProgram(vertexShader, fragmentShader);
+
+        if (BuildConfig.DEBUG) {
+            validateProgram(program);
+        }
+
+        return program;
     }
 }
