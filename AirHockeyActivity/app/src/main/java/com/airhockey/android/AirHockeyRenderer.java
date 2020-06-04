@@ -2,6 +2,7 @@ package com.airhockey.android;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import com.airhockey.android.objects.Mallet;
 import com.airhockey.android.objects.Puck;
@@ -27,6 +28,7 @@ import static android.opengl.Matrix.translateM;
 
 public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
+    private static final String TAG = "AirHockeyRenderer";
     private final Context context;
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
@@ -67,14 +69,6 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width / (float) height, 1f, 10f);
 
         setLookAtM(viewMatrix, 0, 0f, 1.2f, 2.2f, 0f, 0f, 0f, 0f, 1f, 0f);
-
-//        setIdentityM(modelMatrix, 0);
-//        translateM(modelMatrix, 0, 0f, 0f, -3f);
-//        rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);
-//
-//        final float[] temp = new float[16];
-//        multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
-//        System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
     }
 
     @Override
@@ -118,5 +112,13 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         setIdentityM(modelMatrix, 0);
         rotateM(modelMatrix, 0, -90f, 1f, 0f, 0f);
         multiplyMM(modelViewProjectMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0);
+    }
+
+    public void handleTouchPress(float normalizedX, float normalizedY) {
+        Log.d(TAG, "handleTouchPress: " + normalizedX + " ," + normalizedY);
+    }
+
+    public void handleTouchDrag(float normalizedX, float normalizedY) {
+        Log.d(TAG, "handleTouchDrag: " + normalizedX + " ," + normalizedY);
     }
 }
