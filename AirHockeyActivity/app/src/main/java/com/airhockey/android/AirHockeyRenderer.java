@@ -40,6 +40,11 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     private final float[] modelViewProjectMatrix = new float[16];
     private final float[] invertedViewProjectionMatrix = new float[16];
 
+    private final float leftBound = -0.5f;
+    private final float rightBound = 0.5f;
+    private final float farBound = -0.8f;
+    private final float nearBound = 0.8f;
+
     private Table table;
     private Mallet mallet;
     private Puck puck;
@@ -162,7 +167,11 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
             Geometry.Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
             Geometry.Plane plane = new Geometry.Plane(new Geometry.Point(0, 0, 0), new Geometry.Vector(0, 1, 0));
             Geometry.Point touchedPoint = Geometry.intersectionPoint(ray, plane);
-            blueMalletPosition = new Geometry.Point(touchedPoint.x, mallet.height / 2f, touchedPoint.z);
+            blueMalletPosition = new Geometry.Point(clamp(touchedPoint.x, leftBound + mallet.radius, rightBound - mallet.radius), mallet.height / 2f, clamp(touchedPoint.z, 0f + mallet.radius, nearBound - mallet.radius));
         }
+    }
+
+    private float clamp(float value, float min, float max) {
+        return Math.min(max, Math.max(min, value));
     }
 }
